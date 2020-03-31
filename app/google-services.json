@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "753723042021",
+    "firebase_url": "https://fogvehicleaccident.firebaseio.com",
+    "project_id": "fogvehicleaccident",
+    "storage_bucket": "fogvehicleaccident.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753723042021:android:c4c09b5733303c00814c0c",
+        "android_client_info": {
+          "package_name": "com.example.fogvehicleaccident"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "753723042021-l0edndc1qq0rmu2vb17l7ehbt002pt7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi_kWHU7RyFmnQpjR3G1AIFxS2U8KzatE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753723042021-l0edndc1qq0rmu2vb17l7ehbt002pt7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
