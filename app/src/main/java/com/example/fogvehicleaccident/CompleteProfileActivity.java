@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,14 @@ import androidx.core.app.ActivityCompat;
 //import com.google.android.gms.location.FusedLocationProviderClient;
 //import com.google.android.gms.location.LocationServices;
 //import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,14 +49,16 @@ public class CompleteProfileActivity extends AppCompatActivity {
     ImageView profileImage;
     private Uri imagePath;
     int count = 0;
-    private String selection = "User";
     String userName, userGmail, userCategory, userPassword;
     private LocationManager locationManager;
     String provider, lati, loni, addressString;
     Double latitude = 0.0, longitude = 0.0;
    // FusedLocationProviderClient mFusedLocationClient;
-    EditText name, contact, age, address, parkingSpace, parkingName;
-    final FirbaseAuthenticationClass firbaseAuthenticationClass = new FirbaseAuthenticationClass();
+    EditText name, contact,address;
+  //  final FirbaseAuthenticationClass firbaseAuthenticationClass = new FirbaseAuthenticationClass();
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    final DatabaseReference reference = database.getReference("Users");
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -70,16 +80,14 @@ public class CompleteProfileActivity extends AppCompatActivity {
 //            age.setVisibility(View.VISIBLE);
 //
 //        }
-        userName = getIntent().getStringExtra("Name");
+        userName = getIntent().getStringExtra("name");
         profileImage = (ImageView) findViewById(R.id.profileImage);
         name = (EditText) findViewById(R.id.name);
         //Setting UserName
         name.setText(String.valueOf(userName));
         contact = (EditText) findViewById(R.id.contact);
-        age = (EditText) findViewById(R.id.age);
+        address = (EditText) findViewById(R.id.txtAddress);
         //address=(EditText) findViewById(R.id.address);
-        parkingName = (EditText) findViewById(R.id.parkingName);
-        parkingSpace = (EditText) findViewById(R.id.totalParkingSpace);
         btnRegister = (CardView) findViewById(R.id.register);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Registering..... ");
@@ -152,36 +160,63 @@ public class CompleteProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String Name = name.getText().toString().toUpperCase();
-                // String Age = age.getText().toString();
+                 String Address = address.getText().toString();
                 String Contact = contact.getText().toString();
-                String ParkingSpace = parkingSpace.getText().toString();
-                String ParkingName = parkingName.getText().toString();
                 if (Name.equals("")) {
                     name.setError("Enter Valid Name");
                     name.setFocusable(true);
 //                } else if (userCategory.equals("User")&&Age.equals("")) {
 //                    age.setError("Enter Valid Age");
 //                    age.setFocusable(true);
-                } else if (ParkingName.equals("")) {
-                    age.setError("Enter Parking Name");
-                    age.setFocusable(true);
-                } else if (ParkingSpace.equals("")) {
-                    age.setError("Enter Parking Space");
-                    age.setFocusable(true);
-                } else if (Contact.equals("")) {
+                } else if (Address.equals("")) {
+                    contact.setError("Enter Valid Address");
+                    contact.setFocusable(true);
+                }
+                else if (Contact.equals("")) {
                     contact.setError("Enter Valid Contact Number");
                     contact.setFocusable(true);
-                } else if (count == 0) {
+                }else if (count == 0) {
                     Snackbar.make(v, "Please Select Image", Snackbar.LENGTH_LONG).show();
                 } else {
-                    // progressDialog.show();
-                    firbaseAuthenticationClass.RegisterUser(userGmail, userPassword, Contact, Name, ParkingName, ParkingSpace, userCategory, imagePath, lati, loni, addressString, CompleteProfileActivity.this, progressDialog);
+                     progressDialog.show();
+                    RegisterUser(userGmail, userPassword, Contact, Name, "", Address, progressDialog);
 
                 }
             }
         });
 
     }
+
+    public void RegisterUser(final String userGmail, String userPassword, final String contact, final String name, final String imagePath, final String address, final ProgressDialog progressDialog) {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(userGmail, userPassword)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            UserAttr userAttr = new UserAttr();
+                            userAttr.setEmail(userGmail);
+                            userAttr.setContact(contact);
+                            userAttr.setName(name);
+                            userAttr.setAddress(address);
+                            userAttr.setId(uid);
+                            userAttr.setImageUrl(imagePath);
+                            reference.child(uid).setValue(userAttr);
+
+                            Toast.makeText(getApplicationContext(), "Account Created", Toast.LENGTH_SHORT).show();
+//                                  getApplicationContext().finish();
+                            progressDialog.dismiss();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CompleteProfileActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
+    }
+
 
     @Override
     public void onBackPressed() {

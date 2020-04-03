@@ -1,5 +1,7 @@
 package com.example.fogvehicleaccident;
 
+import android.net.Uri;
+
 public class UserAttr {
     String Id;
     String Name;
@@ -9,16 +11,12 @@ public class UserAttr {
     String Latitude;
     String Longitude;
     String ImageUrl;
-    String ParkingName;
-    String ParkingSpace;
-    String Category;
-    String Rating;
-    String NumRating;
+
 
     public UserAttr() {
     }
 
-    public UserAttr(String id, String name, String email, String contact, String address, String latitude, String longitude, String imageUrl, String parkingName, String parkingSpace, String category, String rating, String numRating) {
+    public UserAttr(String id, String name, String email, String contact, String address, String latitude, String longitude, String imageUrl) {
         Id = id;
         Name = name;
         Email = email;
@@ -27,58 +25,14 @@ public class UserAttr {
         Latitude = latitude;
         Longitude = longitude;
         ImageUrl = imageUrl;
-        ParkingName = parkingName;
-        ParkingSpace = parkingSpace;
-        Category = category;
-        Rating = rating;
-        NumRating = numRating;
-    }
-
-    public String getRating() {
-        return Rating;
-    }
-
-    public void setRating(String rating) {
-        Rating = rating;
-    }
-
-    public String getNumRating() {
-        return NumRating;
-    }
-
-    public void setNumRating(String numRating) {
-        NumRating = numRating;
     }
 
     public String getId() {
         return Id;
     }
 
-    public String getLatitude() {
-        return Latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        Latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return Longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        Longitude = longitude;
-    }
-
     public void setId(String id) {
         Id = id;
-    }
-    public String getCategory() {
-        return Category;
-    }
-
-    public void setCategory(String category) {
-        Category = category;
     }
 
     public String getName() {
@@ -113,27 +67,27 @@ public class UserAttr {
         Address = address;
     }
 
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        Longitude = longitude;
+    }
+
     public String getImageUrl() {
         return ImageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         ImageUrl = imageUrl;
-    }
-
-    public String getParkingName() {
-        return ParkingName;
-    }
-
-    public void setParkingName(String parkingName) {
-        ParkingName = parkingName;
-    }
-
-    public String getParkingSpace() {
-        return ParkingSpace;
-    }
-
-    public void setParkingSpace(String parkingSpace) {
-        ParkingSpace = parkingSpace;
     }
 }

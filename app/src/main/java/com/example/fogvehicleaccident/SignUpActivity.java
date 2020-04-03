@@ -27,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
     Button btnLogin, btnSignup;
     EditText txtName, txtEmail, txtPassword, rePass;
     ProgressDialog progressDialog;
-    String category;
+    String category,name,password,email;
     private String selection;
     TextView mHaveAccountTv;
     ProgressDialog pd;
@@ -72,9 +72,9 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = txtEmail.getText().toString().trim();
-                String password = txtPassword.getText().toString().trim();
-                String name = txtName.getText().toString();
+                 email = txtEmail.getText().toString().trim();
+                 password = txtPassword.getText().toString().trim();
+                 name = txtName.getText().toString();
                 String Phone = rePass.getText().toString();
 
                 if (name == null || name.equals("")) {
@@ -94,7 +94,14 @@ public class SignUpActivity extends AppCompatActivity {
 
                 } else {
 
-                        RegisterUser(email, password, " ", name, " ", " ", category, " ", " ", " ", " ", pd);
+                    Intent intent = new Intent(SignUpActivity.this,CompleteProfileActivity.class);
+                    intent.putExtra( "name",name);
+                    intent.putExtra( "Password",password);
+                    intent.putExtra( "Email",email);
+
+                    startActivity(intent);
+
+                       // RegisterUser(email, password, " ", name, " ", " ", " ", " ", pd);
 
                 }
             }
@@ -111,41 +118,5 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    public void RegisterUser(final String userGmail, String userPassword, final String contact, final String name, final String parkingName, final String parkingSpace, final String userCategory, final String imagePath, final String lati, final String loni, final String addressString, final ProgressDialog progressDialog) {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(userGmail, userPassword)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            UserAttr userAttr = new UserAttr();
-                            userAttr.setEmail(userGmail);
-                            userAttr.setContact(contact);
-                            userAttr.setName(name);
-                            userAttr.setAddress(addressString);
-                            userAttr.setLatitude(lati);
-                            userAttr.setLongitude(loni);
-                            userAttr.setParkingName(parkingName);
-                            userAttr.setParkingSpace(parkingSpace);
-                            userAttr.setCategory(userCategory);
-                            userAttr.setRating("0");
-                            userAttr.setNumRating("0");
-                            userAttr.setId(uid);
-                            userAttr.setImageUrl(imagePath);
-                            reference.child(uid).setValue(userAttr);
-                            startActivity(new Intent(SignUpActivity.this, CompleteProfileActivity.class));
-                            Toast.makeText(getApplicationContext(), "Account Created", Toast.LENGTH_SHORT).show();
-//                                  getApplicationContext().finish();
-                            progressDialog.dismiss();
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SignUpActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-            }
-        });
-    }
 
 }

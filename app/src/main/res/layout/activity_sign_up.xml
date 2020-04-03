@@ -11,7 +11,7 @@
         android:padding="10dp"
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:src="@drawable/gglogo"
+        android:src="@drawable/logo"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -187,7 +187,7 @@
         android:layout_marginTop="25dp"
         android:text="already have account?? Login"
         android:textAlignment="center"
-        android:textColor="@color/colorGreen"
+        android:textColor="#1976BF"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtSignUp"

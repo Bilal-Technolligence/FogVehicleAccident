@@ -48,7 +48,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginLeft="40dp"
                 android:layout_height="wrap_content"
@@ -74,7 +74,6 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:hint="Enter Age"
-                android:visibility="gone"
                 app:boxStrokeColor="@color/colorWhite"
                 android:textColorHint="@color/colorWhite">
                 <com.google.android.material.textfield.TextInputEditText
@@ -82,6 +81,7 @@
                     android:inputType="number"
                     android:textColor="@color/colorBlack"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                 </com.google.android.material.textfield.TextInputEditText>
@@ -94,50 +94,12 @@
                 android:layout_marginLeft="40dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Enter Parking Name"
+                android:hint="Enter Address"
                 app:boxStrokeColor="@color/colorWhite"
                 android:textColorHint="@color/colorWhite">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/parkingName"
+                    android:id="@+id/txtAddress"
                     android:inputType="text"
-                    android:textColor="@color/colorBlack"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </com.google.android.material.textfield.TextInputEditText>
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Total Parking Space"
-                app:boxStrokeColor="@color/colorWhite"
-                android:textColorHint="@color/colorWhite">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/totalParkingSpace"
-                    android:inputType="number"
-                    android:textColor="@color/colorBlack"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </com.google.android.material.textfield.TextInputEditText>
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:hint="Parking Location"
-                app:boxStrokeColor="@color/colorWhite"
-                android:textColorHint="@color/colorWhite">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txtParkingLocation"
-                    android:inputType="number"
                     android:textColor="@color/colorBlack"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -157,7 +119,7 @@
                 android:layout_marginLeft="37dp"
                 android:layout_marginRight="37dp"
                 android:layout_marginBottom="0dp"
-                app:cardBackgroundColor="#35CD3B">
+                app:cardBackgroundColor="#1976BF">
 
                 <TextView
                     android:layout_width="wrap_content"

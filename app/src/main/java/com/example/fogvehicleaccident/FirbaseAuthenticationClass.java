@@ -42,13 +42,9 @@ public class FirbaseAuthenticationClass extends AppCompatActivity {
                             reference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    String cat = dataSnapshot.child("category").getValue().toString();
-                                    if(cat.equals("User")){
                                         activity.startActivity(new Intent(activity, MainActivity.class));
                                         activity.finish();
                                         progressDialog.dismiss();
-                                    }
-
                                 }
 
                                 @Override
@@ -70,8 +66,10 @@ public class FirbaseAuthenticationClass extends AppCompatActivity {
         });
     }
 
+//                    RegisterUser(userGmail, userPassword, Contact, Name,  imagePath, lati, loni, addressString, CompleteProfileActivity.this, progressDialog);
 
-    public void RegisterUser(final String userGmail, String userPassword, final String contact, final String name, final String parkingName, final String parkingSpace, final String userCategory, final Uri imagePath, final String lati,final String loni, final String addressString, final CompleteProfileActivity completeProfileActivity, final ProgressDialog progressDialog) {
+
+    public void RegisterUser(final String userGmail, String userPassword, final String contact, final String name,  final String imagePath,final String address, final CompleteProfileActivity completeProfileActivity, final ProgressDialog progressDialog) {
       FirebaseAuth.getInstance().createUserWithEmailAndPassword(userGmail,userPassword)
               .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                   @Override
@@ -80,7 +78,7 @@ public class FirbaseAuthenticationClass extends AppCompatActivity {
                           final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                           StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + FirebaseDatabase.getInstance().getReference().child("Users").push().getKey());
-                          storageReference.putFile(imagePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                          storageReference.putFile(Uri.parse(imagePath)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                               @Override
                               public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                   Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
@@ -91,22 +89,11 @@ public class FirbaseAuthenticationClass extends AppCompatActivity {
                                   userAttr.setEmail(userGmail);
                                   userAttr.setContact(contact);
                                   userAttr.setName(name);
-                                  userAttr.setAddress(addressString);
-                                  userAttr.setLatitude(lati);
-                                  userAttr.setLongitude(loni);
-                                  userAttr.setParkingName(parkingName);
-                                  userAttr.setParkingSpace(parkingSpace);
-                                  userAttr.setCategory(userCategory);
+                                  userAttr.setAddress(address);
                                   userAttr.setId(uid);
-                                  userAttr.setRating("0");
-                                  userAttr.setNumRating("0");
-                                  userAttr.setImageUrl(downloadUri.toString());
-                                  reference.child(uid).setValue(userAttr);
-                                  if (userCategory.equals("User"))
-                                      completeProfileActivity.startActivity(new Intent(completeProfileActivity, MainActivity.class));
-                                  else
+                                  userAttr.setImageUrl(imagePath);                                  reference.child(uid).setValue(userAttr);
                                   Toast.makeText(completeProfileActivity, "Account Created", Toast.LENGTH_SHORT).show();
-//                                  getApplicationContext().finish();
+                                  completeProfileActivity.startActivity(new Intent(completeProfileActivity, MainActivity.class));
                                   progressDialog.dismiss();
 
                               }
