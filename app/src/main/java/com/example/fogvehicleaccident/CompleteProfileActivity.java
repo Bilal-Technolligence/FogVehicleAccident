@@ -32,12 +32,16 @@ import androidx.core.app.ActivityCompat;
 //import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,9 +57,9 @@ public class CompleteProfileActivity extends AppCompatActivity {
     private LocationManager locationManager;
     String provider, lati, loni, addressString;
     Double latitude = 0.0, longitude = 0.0;
-   // FusedLocationProviderClient mFusedLocationClient;
-    EditText name, contact,address;
-  //  final FirbaseAuthenticationClass firbaseAuthenticationClass = new FirbaseAuthenticationClass();
+    // FusedLocationProviderClient mFusedLocationClient;
+    EditText name, contact, address;
+    //  final FirbaseAuthenticationClass firbaseAuthenticationClass = new FirbaseAuthenticationClass();
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference reference = database.getReference("Users");
@@ -160,7 +164,7 @@ public class CompleteProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String Name = name.getText().toString().toUpperCase();
-                 String Address = address.getText().toString();
+                String Address = address.getText().toString();
                 String Contact = contact.getText().toString();
                 if (Name.equals("")) {
                     name.setError("Enter Valid Name");
@@ -171,15 +175,14 @@ public class CompleteProfileActivity extends AppCompatActivity {
                 } else if (Address.equals("")) {
                     contact.setError("Enter Valid Address");
                     contact.setFocusable(true);
-                }
-                else if (Contact.equals("")) {
+                } else if (Contact.equals("")) {
                     contact.setError("Enter Valid Contact Number");
                     contact.setFocusable(true);
-                }else if (count == 0) {
+                } else if (count == 0) {
                     Snackbar.make(v, "Please Select Image", Snackbar.LENGTH_LONG).show();
                 } else {
-                     progressDialog.show();
-                    RegisterUser(userGmail, userPassword, Contact, Name, "", Address, progressDialog);
+                    progressDialog.show();
+                    RegisterUser(userGmail, userPassword, Contact, Name, imagePath, Address, progressDialog);
 
                 }
             }
@@ -187,25 +190,36 @@ public class CompleteProfileActivity extends AppCompatActivity {
 
     }
 
-    public void RegisterUser(final String userGmail, String userPassword, final String contact, final String name, final String imagePath, final String address, final ProgressDialog progressDialog) {
+    public void RegisterUser(final String userGmail, String userPassword, final String contact, final String name, final Uri imagePath, final String address, final ProgressDialog progressDialog) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(userGmail, userPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            UserAttr userAttr = new UserAttr();
-                            userAttr.setEmail(userGmail);
-                            userAttr.setContact(contact);
-                            userAttr.setName(name);
-                            userAttr.setAddress(address);
-                            userAttr.setId(uid);
-                            userAttr.setImageUrl(imagePath);
-                            reference.child(uid).setValue(userAttr);
+                            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/" + FirebaseDatabase.getInstance().getReference().child("Users").push().getKey());
+                            storageReference.putFile(imagePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                                    while (!uriTask.isSuccessful()) ;
+                                    Uri downloadUri = uriTask.getResult();
 
-                            Toast.makeText(getApplicationContext(), "Account Created", Toast.LENGTH_SHORT).show();
+                                    final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                    UserAttr userAttr = new UserAttr();
+                                    userAttr.setEmail(userGmail);
+                                    userAttr.setContact(contact);
+                                    userAttr.setName(name);
+                                    userAttr.setAddress(address);
+                                    userAttr.setId(uid);
+                                    userAttr.setImageUrl(downloadUri.toString());
+                                    reference.child(uid).setValue(userAttr);
+
+                                    Toast.makeText(getApplicationContext(), "Account Created", Toast.LENGTH_SHORT).show();
 //                                  getApplicationContext().finish();
-                            progressDialog.dismiss();
+                                    progressDialog.dismiss();
+
+                                }
+                            });
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
