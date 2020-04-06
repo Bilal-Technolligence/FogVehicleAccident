@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreen extends AppCompatActivity {
-
+    Boolean session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,10 +24,8 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 try {
                     sleep( 5000 );
+                 SESSION();
 
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class );
-                    startActivity( intent );
-                    finish();
                     super.run();
 
                 } catch (InterruptedException e) {
@@ -37,5 +35,27 @@ public class SplashScreen extends AppCompatActivity {
             }
         };
         timer.start();
+    }
+
+    public void SESSION(){
+        //default value false
+        session = Boolean.valueOf(Save.read(getApplicationContext(),"session","false"));
+        if (!session){
+            //when user first or logout
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class );
+            startActivity( intent );
+            finish();
+
+
+        }
+        else{
+            //when user loged in
+            //here value true
+            //how the value can change true
+
+            Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

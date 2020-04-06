@@ -23,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private String selection;
     String category;
 
+
     @Override
     public void onBackPressed() {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -52,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog=new ProgressDialog(this);
         progressDialog.setMessage("Logging In..... ");
         final FirbaseAuthenticationClass firbaseAuthenticationClass=new FirbaseAuthenticationClass();
-
         btnLogin2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,4 +86,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

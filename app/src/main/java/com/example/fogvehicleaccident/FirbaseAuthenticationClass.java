@@ -39,11 +39,16 @@ public class FirbaseAuthenticationClass extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String uid = mAuth.getCurrentUser().getUid();
+
                             reference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        activity.startActivity(new Intent(activity, MainActivity.class));
-                                        activity.finish();
+                                    //save session
+                                    //saving value true for session
+                                    Save.save(activity,"session","true");
+                                    activity.startActivity(new Intent(activity, MainActivity.class));
+
+                                    activity.finish();
                                         progressDialog.dismiss();
                                 }
 
@@ -54,8 +59,10 @@ public class FirbaseAuthenticationClass extends AppCompatActivity {
                             });
 
 
-
                         }
+
+
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override

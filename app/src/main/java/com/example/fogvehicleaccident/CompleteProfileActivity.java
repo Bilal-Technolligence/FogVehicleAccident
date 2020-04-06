@@ -216,6 +216,12 @@ public class CompleteProfileActivity extends AppCompatActivity {
 
                                     Toast.makeText(getApplicationContext(), "Account Created", Toast.LENGTH_SHORT).show();
 //                                  getApplicationContext().finish();
+                                    //save session
+                                    //saving value true for session
+                                    Save.save(getApplicationContext(),"session","true");
+                                    Intent intent = new Intent(CompleteProfileActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
                                     progressDialog.dismiss();
 
                                 }
