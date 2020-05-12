@@ -3,4 +3,11 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="title_activity_maps">Map</string>
+    <string-array name="selection">
+        <item>Car</item>
+        <item>Bike</item>
+        <item>Truck</item>
+        <item>Jeep</item>
+        <item>Bus</item>
+    </string-array>
 </resources>
